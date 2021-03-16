@@ -323,9 +323,9 @@ public class DBproject{
 				query += input_seats + ");";
 				
 				System.out.println(query);
-				//esql.executeQuery(query);
-         			int rowCount = esql.executeQuery(query);
-         			System.out.println ("total row(s): " + rowCount);
+				esql.executeUpdate(query);
+         			//int rowCount = esql.executeQuery(query);
+         			System.out.println ("\nSuccessfully added Ship with id " + input_id + " to the database.\n");
 				
 				break;
       			}catch(Exception e){
