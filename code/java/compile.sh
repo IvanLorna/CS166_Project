@@ -1,3 +1,3 @@
 #! /bin/bash
-rm -rf bin/*.class
-javac -cp ".;lib/postgresql-42.1.4.jar;" src/DBproject.java -d bin/
+rm -rf java/bin/*.class
+javac -cp ".;java/lib/postgresql-42.1.4.jar;" java/src/DBproject.java -d java/bin/

@@ -314,18 +314,18 @@ public class DBproject{
                                 String input_seats = in.readLine();
 
 				//WRITE INSERT call and then its done
-				String query = "INSERT INTO Ship (id,make,model,age,seats) VALUES (";
+				String query = "INSERT INTO Ship (id, make, model, age, seats) VALUES (";
 				//String query = "INSERT INTO Ship VALUES (";
 				query += input_id + ", ";
-				query += "\"" + input_make + "\", ";
-				query += "\"" +input_model + "\", ";
+				query += "'" + input_make + "', ";
+				query += "'" +input_model + "', ";
 				query += input_age + ", ";
 				query += input_seats + ");";
 				
 				System.out.println(query);
-				esql.executeQuery(query);
-         			//int rowCount = esql.executeQuery(query);
-         			//System.out.println ("total row(s): " + rowCount);
+				//esql.executeQuery(query);
+         			int rowCount = esql.executeQuery(query);
+         			System.out.println ("total row(s): " + rowCount);
 				
 				break;
       			}catch(Exception e){
