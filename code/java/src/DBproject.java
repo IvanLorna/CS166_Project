@@ -329,7 +329,8 @@ public class DBproject{
 				
 				break;
       			}catch(Exception e){
-         			System.out.println("Your input is invalid!");
+         			//System.out.println("Your input is invalid!");
+				e.printStackTrace();
 				continue;
       			}}while (true);
 	}
