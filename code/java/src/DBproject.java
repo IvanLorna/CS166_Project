@@ -299,18 +299,18 @@ public class DBproject{
 		do{
 			try{
        	 			//NOT DONE
-				System.out.print("Please enter Ship ID: ");
+				System.out.print("Please enter new Ship's ID: ");
                                 String input_id = in.readLine();
-                                System.out.print("Please enter Ship make: ");
+                                System.out.print("Please enter new Ship's make: ");
                                 String input_make = in.readLine();
 
-				System.out.print("Please enter Ship model: ");
+				System.out.print("Please enter new Ship's model: ");
                                 String input_model = in.readLine();
 	
-				System.out.print("Please enter Ship age: ");
+				System.out.print("Please enter new Ship's age: ");
                                 String input_age = in.readLine();
 				
-				System.out.print("Please enter # of available sets (between 0 and 500): ");
+				System.out.print("Please enter new Ship's # of free seats (between 0 and 500): ");
                                 String input_seats = in.readLine();
 
 				//WRITE INSERT call and then its done
@@ -322,7 +322,7 @@ public class DBproject{
 				query += input_age + ", ";
 				query += input_seats + ");";
 				
-				System.out.println(query);
+				//System.out.println(query);
 				esql.executeUpdate(query);
          			//int rowCount = esql.executeQuery(query);
          			System.out.println ("\nSuccessfully added Ship with id " + input_id + " to the database.\n");
@@ -336,6 +336,30 @@ public class DBproject{
 	}
 
 	public static void AddCaptain(DBproject esql) {//2
+		do{
+    			try{
+				System.out.print("Please enter new Captain's ID: ");
+				String input_id = in.readLine();
+				System.out.print("Please enter new Captain's full name: ");
+				String input_name = in.readLine();
+	
+				System.out.print("Please enter new Captain's nationality: ");
+				String input_nationality = in.readLine();
+			
+				String query = "INSERT INTO Captain (id, fullname, nationality) VALUES (";
+				query += input_id + ", ";
+				query += "'" + input_name + "', ";
+				query += "'" +input_nationality + "'); ";
+	
+				//System.out.println(query);
+				esql.executeUpdate(query);
+				System.out.println ("\nSuccessfully added Captain with id " + input_id + " to the database.\n");
+
+			break;
+			}catch(Exception e){
+				e.printStackTrace();
+			continue;
+		}}while (true);
 	}
 
 	public static void AddCruise(DBproject esql) {//3
