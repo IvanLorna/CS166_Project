@@ -296,6 +296,33 @@ public class DBproject{
 	}//end readChoice
 
 	public static void AddShip(DBproject esql) {//1
+		do{
+			try{
+       	 			//NOT DONE
+				System.out.print("Please enter Ship ID: ");
+                                String input_id = in.readLine();
+                                System.out.print("Please enter Ship make: ");
+                                String input_make = in.readLine();
+
+				System.out.print("Please enter Ship model: ");
+                                String input_model = in.readLine();
+	
+				System.out.print("Please enter Ship age(between 0 and 9999): ");
+                                String input_age = in.readLine();
+				
+				System.out.print("Please enter # of available sets (between 0 and 500): ");
+                                String input_seats = in.readLine();
+
+				//WRITE INSERT call and then its done
+				//String query = "INSERT ....~~~~;";
+         			//int rowCount = esql.executeQuery(query);
+         			//System.out.println ("total row(s): " + rowCount);
+				
+				break;
+      			}catch(Exception e){
+         			System.out.println("Your input is invalid!");
+				continue;
+      			}}while (true);
 	}
 
 	public static void AddCaptain(DBproject esql) {//2
