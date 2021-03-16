@@ -351,7 +351,6 @@ public class DBproject{
 				query += "'" + input_name + "', ";
 				query += "'" +input_nationality + "'); ";
 	
-				//System.out.println(query);
 				esql.executeUpdate(query);
 				System.out.println ("\nSuccessfully added Captain with id " + input_id + " to the database.\n");
 
@@ -363,6 +362,46 @@ public class DBproject{
 	}
 
 	public static void AddCruise(DBproject esql) {//3
+                do{
+                        try{
+                                System.out.print("Please enter new Cruise's ID: ");
+                                String input_cnum = in.readLine();
+                                System.out.print("Please enter new Cruise's ticket price: ");
+                                String input_cost = in.readLine();
+                                System.out.print("Please enter new Cruise's number of tickets sold already: ");
+                                String input_numtics = in.readLine();
+				System.out.print("Please enter new Cruise's number of stops: ");
+                                String input_numstops = in.readLine();
+				System.out.print("Please enter new Cruise's departure date (YYYY-MM-DD): ");
+                                String input_depdate = in.readLine();
+				System.out.print("Please enter new Cruise's arrival date(YYYY-MM-DD): ");
+                                String input_arrdate = in.readLine();
+				System.out.print("Please enter new Cruise's departure port code (5 characters): ");
+                                String input_depport = in.readLine();
+				System.out.print("Please enter new Cruise's arrival port code (5 characters): ");
+                                String input_arrport = in.readLine();
+
+
+                                String query = "INSERT INTO Cruise VALUES (";
+                                query += input_cnum + ", ";
+				query += input_cost + ", ";
+				query += input_numtics + ", ";
+				query += input_numstops + ", ";
+
+				query += "'" + input_depdate + "', ";
+				query += "'" + input_arrdate + "', ";
+                                query += "'" + input_arrport + "', ";
+                                query += "'" +input_depport + "'); ";
+
+                                esql.executeUpdate(query);
+                                System.out.println ("\nSuccessfully added Cruise with id " + input_cnum + " to the database.\n");
+
+                        break;
+                        }catch(Exception e){
+                                e.printStackTrace();
+                        continue;
+                }}while (true);
+	
 	}
 
 
