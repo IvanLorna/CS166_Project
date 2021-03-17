@@ -1,0 +1,2 @@
+CONSTRAINTS // ASSUMPTIONS:
+assumption: num_sold can be greater than seats on the ship, there are [num_sold-seats] waitlisted customers.
