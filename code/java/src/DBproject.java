@@ -536,5 +536,11 @@ public class DBproject{
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//7
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
+		try{
+			String query = "SELECT R.status, COUNT(DISTINCT R.ccid) FROM Reservation R GROUP BY R.status;";
+			esql.executeQueryAndPrintResult(query);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
-}
+}								
