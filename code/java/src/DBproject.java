@@ -299,8 +299,6 @@ public class DBproject{
 		do{
 			try{
        	 			//Poll user, read input
-				System.out.print("Please enter new Ship's ID: ");
-                                String input_id = in.readLine();
                                 System.out.print("Please enter new Ship's make: ");
                                 String input_make = in.readLine();
 
@@ -312,12 +310,19 @@ public class DBproject{
 				
 				System.out.print("Please enter new Ship's # of free seats (between 0 and 500): ");
                                 String input_seats = in.readLine();
+				
+				//Get new id for ship, my prefered implementation over sequences
+				String query_for_sid = "SELECT MAX(S.id) FROM Ship S";
+				String result = esql.executeQueryAndReturnResult(query_for_sid).get(0).get(0);
+				String sid = String.valueOf(Integer.parseInt(result)+1);
+				
+
 
 				//write SQL query into string
 				//WE want to INSERT INTO Ship to add a new ship object with the above data into the table
 				String query = "INSERT INTO Ship (id, make, model, age, seats) VALUES (";
 				//add user inputted data, note that some are suppose to be strings, so need to be captureed in ''
-				query += input_id + ", ";
+				query += sid + ", ";
 				query += "'" + input_make + "', ";
 				query += "'" +input_model + "', ";
 				query += input_age + ", ";
@@ -326,7 +331,7 @@ public class DBproject{
 				//execute update using given executeUpdate function, it returns void
 				esql.executeUpdate(query);
 				//Notify User of Successful operation
-         			System.out.println ("\nSuccessfully added Ship with id " + input_id + " to the database.\n");
+         			System.out.println ("\nSuccessfully added Ship with id " + sid + " to the database.\n");
 				
 				break;
       			}catch(Exception e){
@@ -340,25 +345,33 @@ public class DBproject{
 		do{
     			try{
 				//Poll user, get input
-				System.out.print("Please enter new Captain's ID: ");
-				String input_id = in.readLine();
 				System.out.print("Please enter new Captain's full name: ");
 				String input_name = in.readLine();
-	
 				System.out.print("Please enter new Captain's nationality: ");
 				String input_nationality = in.readLine();
+
+
+				//Get new cid for reservation, my prefered implementation over sequences
+				String query_for_cid = "SELECT MAX(C.id) FROM Captain C";
+				String result = esql.executeQueryAndReturnResult(query_for_cid).get(0).get(0);
+				String cid = String.valueOf(Integer.parseInt(result)+1);
+				
+
+
+
+
 
 				//INSERT INTO captains to add new captain object to table
 				String query = "INSERT INTO Captain (id, fullname, nationality) VALUES (";
 				//include user generated input
-				query += input_id + ", ";
+				query += cid + ", ";
 				query += "'" + input_name + "', ";
 				query += "'" +input_nationality + "'); ";
 
 				//execute using provided executeUpdate function
 				esql.executeUpdate(query);
 				//notify user of successful operation
-				System.out.println ("\nSuccessfully added Captain with id " + input_id + " to the database.\n");
+				System.out.println ("\nSuccessfully added Captain with id " + cid + " to the database.\n");
 
 			break;
 			}catch(Exception e){
@@ -371,8 +384,6 @@ public class DBproject{
                 do{
                         try{
 				//poll user for info (theres alot this time)
-                                System.out.print("Please enter new Cruise's ID: ");
-                                String input_cnum = in.readLine();
                                 System.out.print("Please enter new Cruise's ticket price: ");
                                 String input_cost = in.readLine();
                                 System.out.print("Please enter new Cruise's number of tickets sold already: ");
@@ -388,11 +399,17 @@ public class DBproject{
 				System.out.print("Please enter new Cruise's arrival port code (5 characters): ");
                                 String input_arrport = in.readLine();
 
+				//Get new cnum for cruise, my prefered implementation over sequences
+                                String query_for_cnum = "SELECT MAX(C.cnum) FROM Cruise C";
+                                String result = esql.executeQueryAndReturnResult(query_for_cnum).get(0).get(0);
+                                String cnum = String.valueOf(Integer.parseInt(result)+1);
+				
+
 				//INSERT INTO Cruise table to create new cruise object
                                 String query = "INSERT INTO Cruise VALUES (";
 				//include user inputted data
 				//int data
-                                query += input_cnum + ", ";
+                                query += cnum + ", ";
 				query += input_cost + ", ";
 				query += input_numtics + ", ";
 				query += input_numstops + ", ";
@@ -404,7 +421,7 @@ public class DBproject{
 				//perform SQL query
                                 esql.executeUpdate(query);
 				//notify user of successful operation
-                                System.out.println ("\nSuccessfully added Cruise with id " + input_cnum + " to the database.\n");
+                                System.out.println ("\nSuccessfully added Cruise with id " + cnum + " to the database.\n");
 
                         break;
                         }catch(Exception e){
@@ -420,15 +437,15 @@ public class DBproject{
 		do{
                         try{
 				//poll user for input
-  				System.out.print("Please enter Customer ID: ");
+  				System.out.print("Please enter you Customer ID: ");
                                 String custid = in.readLine();
-                                System.out.print("Please enter new Cruise number: ");
+                                System.out.print("Please enter Cruise number you wish to book: ");
                                 String crunum = in.readLine();
 				
 				//Get new rnum for reservation, my prefered implementation over sequences
 				String query_for_rnum = "SELECT MAX(R.rnum) FROM Reservation R"; 
 				String result = esql.executeQueryAndReturnResult(query_for_rnum).get(0).get(0);
-				int rnum = Integer.parseInt(result)+1;
+				String rnum = String.valueOf(Integer.parseInt(result)+1);
 
 				//find seats available and tickets already sold
 				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+ crunum +" AND CI.ship_id = S.id";
