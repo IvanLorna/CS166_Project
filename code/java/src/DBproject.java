@@ -498,22 +498,22 @@ public class DBproject{
 		do{
                         try{
                                //poll user for data
-				System.out.print("Please enter new Cruise number: ");
+				System.out.print("Please enter Cruise number: ");
                                 String cnum = in.readLine();
                                 System.out.print("Please enter Cruise Departure date (YYYY-MM-DD): ");
                                 String ddate = in.readLine();
 				
 				//create query using user input
 				String query_for_seats = "SELECT C.num_sold, S.seats FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+cnum+" AND CI.cruise_id = C.cnum AND C.actual_departure_date = '"+ddate+"' AND CI.ship_id = S.id;";
-                                List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
+                                
+				//execute query and return a list of lists for logic below
+				List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
 				
 				//perform logic from results, using Integer.parseInt to get Ints from Strings
-				int availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));				
-				if (availableSeats <= 0) {
-					System.out.println("\nThere are no seats available for this cruise.\n");
-				} else {
-					System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");
-				}
+				int availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));
+				
+				if (availableSeats <= 0) {System.out.println("\nThere are no seats available for this cruise.\n");}
+				else {System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");}
 
                         	break;
                         }catch(Exception e){
@@ -526,8 +526,12 @@ public class DBproject{
 	public static void ListsTotalNumberOfRepairsPerShip(DBproject esql) {//6
 		// Count number of repairs per Ships and list them in descending order
 		try{
+			//this query doesnt require user input, so just perform query and print the result
 			String query = "SELECT S.id as Ship_ID, COUNT(R.rid) as Repairs_Made FROM Ship S, Repairs R WHERE S.id = R.ship_id GROUP BY S.id ORDER BY COUNT(R.rid) DESC;";
+			//space out lines for readibility
+			System.out.print("\n");
 			esql.executeQueryAndPrintResult(query);
+			System.out.print("\n");
 		}catch(Exception e) {
 			e.printStackTrace();}
 
@@ -536,11 +540,27 @@ public class DBproject{
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//7
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
-		try{
-			String query = "SELECT R.status, COUNT(DISTINCT R.ccid) FROM Reservation R GROUP BY R.status;";
-			esql.executeQueryAndPrintResult(query);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		do{
+			try{
+				//apparently, need to pass in cruise and passenger status
+				//poll user for cruise number and reservation status
+				System.out.print("Please enter Cruise number: ");
+                                String cnum = in.readLine();
+                                System.out.print("Please enter Reservation status ('R','W',or 'C'): ");
+                                String status = in.readLine();
+				
+				//perform query using user input
+				String query = "SELECT R.status, COUNT(DISTINCT R.ccid) FROM Reservation R WHERE cid = "+cnum+" AND status = '"+status+"' GROUP BY R.status;";
+				
+				//add space between lines for readability
+				System.out.print("\n");
+				esql.executeQueryAndPrintResult(query);
+				System.out.print("\n");
+				break;
+			}catch(Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+		}while(true);
 	}
 }								
