@@ -473,7 +473,6 @@ public class DBproject{
                                 System.out.print("Please enter Cruise Departure date (YYYY-MM-DD): ");
                                 String ddate = in.readLine();
 				
-				//
 				String query_for_seats = "SELECT C.num_sold, S.seats FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+cnum+" AND CI.cruise_id = C.cnum AND C.actual_departure_date = '"+ddate+"' AND CI.ship_id = S.id;";
                                 List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
 
@@ -486,7 +485,7 @@ public class DBproject{
 					System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");
 				}
 
-                        break;
+                        	break;
                         }catch(Exception e){
                                 e.printStackTrace();
                         continue;
@@ -496,6 +495,12 @@ public class DBproject{
 
 	public static void ListsTotalNumberOfRepairsPerShip(DBproject esql) {//6
 		// Count number of repairs per Ships and list them in descending order
+		try{
+			String query = "SELECT S.id as Ship_ID, COUNT(R.rid) as Repairs_Made FROM Ship S, Repairs R WHERE S.id = R.ship_id GROUP BY S.id ORDER BY COUNT(R.rid) DESC;";
+			esql.executeQueryAndPrintResult(query);
+		}catch(Exception e) {
+			e.printStackTrace();}
+
 	}
 
 	
