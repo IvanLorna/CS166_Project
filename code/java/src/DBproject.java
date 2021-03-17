@@ -298,7 +298,7 @@ public class DBproject{
 	public static void AddShip(DBproject esql) {//1
 		do{
 			try{
-       	 			//NOT DONE
+       	 			//Poll user, read input
 				System.out.print("Please enter new Ship's ID: ");
                                 String input_id = in.readLine();
                                 System.out.print("Please enter new Ship's make: ");
@@ -313,23 +313,24 @@ public class DBproject{
 				System.out.print("Please enter new Ship's # of free seats (between 0 and 500): ");
                                 String input_seats = in.readLine();
 
-				//WRITE INSERT call and then its done
+				//write SQL query into string
+				//WE want to INSERT INTO Ship to add a new ship object with the above data into the table
 				String query = "INSERT INTO Ship (id, make, model, age, seats) VALUES (";
-				//String query = "INSERT INTO Ship VALUES (";
+				//add user inputted data, note that some are suppose to be strings, so need to be captureed in ''
 				query += input_id + ", ";
 				query += "'" + input_make + "', ";
 				query += "'" +input_model + "', ";
 				query += input_age + ", ";
 				query += input_seats + ");";
 				
-				//System.out.println(query);
+				//execute update using given executeUpdate function, it returns void
 				esql.executeUpdate(query);
-         			//int rowCount = esql.executeQuery(query);
+				//Notify User of Successful operation
          			System.out.println ("\nSuccessfully added Ship with id " + input_id + " to the database.\n");
 				
 				break;
       			}catch(Exception e){
-         			//System.out.println("Your input is invalid!");
+         			//Output generated error for debugging
 				e.printStackTrace();
 				continue;
       			}}while (true);
@@ -338,6 +339,7 @@ public class DBproject{
 	public static void AddCaptain(DBproject esql) {//2
 		do{
     			try{
+				//Poll user, get input
 				System.out.print("Please enter new Captain's ID: ");
 				String input_id = in.readLine();
 				System.out.print("Please enter new Captain's full name: ");
@@ -345,13 +347,17 @@ public class DBproject{
 	
 				System.out.print("Please enter new Captain's nationality: ");
 				String input_nationality = in.readLine();
-			
+
+				//INSERT INTO captains to add new captain object to table
 				String query = "INSERT INTO Captain (id, fullname, nationality) VALUES (";
+				//include user generated input
 				query += input_id + ", ";
 				query += "'" + input_name + "', ";
 				query += "'" +input_nationality + "'); ";
-	
+
+				//execute using provided executeUpdate function
 				esql.executeUpdate(query);
+				//notify user of successful operation
 				System.out.println ("\nSuccessfully added Captain with id " + input_id + " to the database.\n");
 
 			break;
@@ -364,6 +370,7 @@ public class DBproject{
 	public static void AddCruise(DBproject esql) {//3
                 do{
                         try{
+				//poll user for info (theres alot this time)
                                 System.out.print("Please enter new Cruise's ID: ");
                                 String input_cnum = in.readLine();
                                 System.out.print("Please enter new Cruise's ticket price: ");
@@ -381,19 +388,22 @@ public class DBproject{
 				System.out.print("Please enter new Cruise's arrival port code (5 characters): ");
                                 String input_arrport = in.readLine();
 
-
+				//INSERT INTO Cruise table to create new cruise object
                                 String query = "INSERT INTO Cruise VALUES (";
+				//include user inputted data
+				//int data
                                 query += input_cnum + ", ";
 				query += input_cost + ", ";
 				query += input_numtics + ", ";
 				query += input_numstops + ", ";
-
+				//string data
 				query += "'" + input_depdate + "', ";
 				query += "'" + input_arrdate + "', ";
                                 query += "'" + input_arrport + "', ";
                                 query += "'" +input_depport + "'); ";
-
+				//perform SQL query
                                 esql.executeUpdate(query);
+				//notify user of successful operation
                                 System.out.println ("\nSuccessfully added Cruise with id " + input_cnum + " to the database.\n");
 
                         break;
@@ -409,17 +419,18 @@ public class DBproject{
 		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
 		do{
                         try{
+				//poll user for input
   				System.out.print("Please enter Customer ID: ");
                                 String custid = in.readLine();
                                 System.out.print("Please enter new Cruise number: ");
                                 String crunum = in.readLine();
 				
-				//Get new rnum for reservation
+				//Get new rnum for reservation, my prefered implementation over sequences
 				String query_for_rnum = "SELECT MAX(R.rnum) FROM Reservation R"; 
 				String result = esql.executeQueryAndReturnResult(query_for_rnum).get(0).get(0);
 				int rnum = Integer.parseInt(result)+1;
 
-				//find status based on seats available vs tickets already sold
+				//find seats available and tickets already sold
 				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+ crunum +" AND CI.ship_id = S.id";
 				List<List<String>> result_status = esql.executeQueryAndReturnResult(query_for_status);
 				
@@ -431,11 +442,11 @@ public class DBproject{
 					status = "W";
 				}
 				
-				//Outputing whether ticket was reserved or waitlisted, updated num_sold
-				//
+				//update num_sold, there is now 1 less ticket available
 				String query_for_tickets = "UPDATE Cruise SET num_sold = num_sold+1 WHERE cnum = "+crunum+";";
 				esql.executeUpdate(query_for_tickets);
 
+				//notify user of successful reservation or waitlisting
 				if (status == "R") {
 					System.out.println("\nSuccessfully Reserved a ticket for Cruise "+crunum+" for Customer "+custid+".\n");
 				} else {
@@ -452,6 +463,7 @@ public class DBproject{
                                 query += "'" + status + "');";
  
 				esql.executeUpdate(query);
+				//notify user of successful operation
 				System.out.println ("\nSuccessfully added Reservation("+status+") with id " + rnum + " to the database.\n");
 	
 				
@@ -468,17 +480,18 @@ public class DBproject{
 		// For Cruise number and date, find the number of availalbe seats (i.e. total Ship capacity minus booked seats )
 		do{
                         try{
-                                System.out.print("Please enter new Cruise number: ");
+                               //poll user for data
+				System.out.print("Please enter new Cruise number: ");
                                 String cnum = in.readLine();
                                 System.out.print("Please enter Cruise Departure date (YYYY-MM-DD): ");
                                 String ddate = in.readLine();
 				
+				//create query using user input
 				String query_for_seats = "SELECT C.num_sold, S.seats FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+cnum+" AND CI.cruise_id = C.cnum AND C.actual_departure_date = '"+ddate+"' AND CI.ship_id = S.id;";
                                 List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
-
-				int availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));				
 				
-
+				//perform logic from results, using Integer.parseInt to get Ints from Strings
+				int availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));				
 				if (availableSeats <= 0) {
 					System.out.println("\nThere are no seats available for this cruise.\n");
 				} else {
