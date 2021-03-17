@@ -466,6 +466,32 @@ public class DBproject{
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//5
 		// For Cruise number and date, find the number of availalbe seats (i.e. total Ship capacity minus booked seats )
+		do{
+                        try{
+                                System.out.print("Please enter new Cruise number: ");
+                                String cnum = in.readLine();
+                                System.out.print("Please enter Cruise Departure date (YYYY-MM-DD): ");
+                                String ddate = in.readLine();
+				
+				//
+				String query_for_seats = "SELECT C.num_sold, S.seats FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+cnum+" AND CI.cruise_id = C.cnum AND C.actual_departure_date = '"+ddate+"' AND CI.ship_id = S.id;";
+                                List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
+
+				int availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));				
+				
+
+				if (availableSeats <= 0) {
+					System.out.println("\nThere are no seats available for this cruise.\n");
+				} else {
+					System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");
+				}
+
+                        break;
+                        }catch(Exception e){
+                                e.printStackTrace();
+                        continue;
+                }}while (true);
+	
 	}
 
 	public static void ListsTotalNumberOfRepairsPerShip(DBproject esql) {//6
