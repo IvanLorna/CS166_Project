@@ -407,6 +407,61 @@ public class DBproject{
 
 	public static void BookCruise(DBproject esql) {//4
 		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
+		do{
+                        try{
+  				System.out.print("Please enter Customer ID: ");
+                                String custid = in.readLine();
+                                System.out.print("Please enter new Cruise number: ");
+                                String crunum = in.readLine();
+				
+				//Get new rnum for reservation
+				String query_for_rnum = "SELECT MAX(R.rnum) FROM Reservation R"; 
+				String result = esql.executeQueryAndReturnResult(query_for_rnum).get(0).get(0);
+				int rnum = Integer.parseInt(result)+1;
+
+				//find status based on seats available vs tickets already sold
+				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+ crunum +" AND CI.ship_id = S.id";
+				List<List<String>> result_status = esql.executeQueryAndReturnResult(query_for_status);
+				
+				//find status based on seats available and sold tickets
+				String status = "C";
+				if (Integer.parseInt(result_status.get(0).get(0))  > Integer.parseInt(result_status.get(0).get(1))) {
+					status = "R";
+				} else {
+					status = "W";
+				}
+				
+				//Outputing whether ticket was reserved or waitlisted, updated num_sold
+				//
+				String query_for_tickets = "UPDATE Cruise SET num_sold = num_sold+1 WHERE cnum = "+crunum+";";
+				esql.executeUpdate(query_for_tickets);
+
+				if (status == "R") {
+					System.out.println("\nSuccessfully Reserved a ticket for Cruise "+crunum+" for Customer "+custid+".\n");
+				} else {
+					System.out.println("\nSuccessfully Waitlisted a ticket for Cruise "+crunum+" for Customer "+custid+".\n");
+ 				}
+					
+
+
+				//INSERT new entry to Reservation
+				String query = "INSERT INTO  Reservation (rnum, ccid, cid, status) VALUES (";
+                                query += rnum + ", ";
+				query += custid + ", ";
+				query += crunum + ", ";
+                                query += "'" + status + "');";
+ 
+				esql.executeUpdate(query);
+				System.out.println ("\nSuccessfully added Reservation("+status+") with id " + rnum + " to the database.\n");
+	
+				
+
+                        break;
+                        }catch(Exception e){
+                                e.printStackTrace();
+                        continue;
+                }}while (true);
+
 	}
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//5
