@@ -62,6 +62,29 @@ public class DBproject{
 			}
 		}
 	}
+	
+	//check positive double helper function
+	public static boolean checkifposdouble(String str) {
+		if (str.trim().equals("")) {
+			System.out.println("empty");
+		    return false;
+		} else {
+		    double num;
+			try {
+				num = Double.parseDouble(str);
+			} catch (NumberFormatException e) {
+				System.out.println(str + " is not a double");
+				return false;
+			}
+			if (num >= 0) {
+				System.out.println(str + " is valid, positive double");
+				return true;
+			} else {
+				System.out.println(str + " is not positive");
+				return false;
+			}
+		}
+	}
 
 	//check number 0-500 helper function
 	public static boolean checkifrange(String str) {
@@ -148,24 +171,29 @@ public class DBproject{
 
 	//check customer ID helper function
 	public static boolean checkifID(String str) {
+		String query_for_strnum = "SELECT MAX(C.id) FROM Customer C;"; 
+		String result = esql.executeQueryAndReturnResult(query_for_strnum).get(0).get(0);
+		int strnum = Integer.parseInt(result);
 		if (str.trim().equals("")) {
 			System.out.println("empty");
 		    return false;
 		} else {
 			str = str.trim();
-			if (str.length() == 10) {
-				try {
-					int num = Integer.parseInt(str);
-					System.out.println(str + " is valid, a 10 digit number");
-				} catch (NumberFormatException e) {
-					System.out.println(str + " is not a number");
-					return false;
-				}
-				return true;
-			} else {
-				System.out.println(str + " is not 10 characters");
+			int num;
+			try {
+				num = Integer.parseInt(str);
+			} catch (NumberFormatException e) {
+				System.out.println(str + " is not a number");
 				return false;
 			}
+			if ((num >= 0) && (num <= strnum)) {
+				System.out.println(str + " is valid, ID within bounds");
+				return true;
+			} else {
+				System.out.println(str + " is not within bounds");
+				return false;
+			}
+			return true;
 		}
 	}
 
@@ -572,7 +600,7 @@ public class DBproject{
 				//poll user for info (theres alot this time)
 		        System.out.print("Please enter new Cruise's ticket price: ");
 		        String input_cost = in.readLine();
-		        while (!checkifpositive(input_cost)) {
+		        while (!checkifposdouble(input_cost)) {
                 	input_cost = in.readLine();
                 }
 		        System.out.print("Please enter new Cruise's number of tickets sold already: ");
