@@ -761,13 +761,13 @@ public class DBproject{
 				List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
 				
 				//perform logic from results, using Integer.parseInt to get Ints from Strings
-				int availableSeats = -1; //error state, there are no cruises on that date
+				int availableSeats = 501; //error state, there are no cruises on that date
 				if (result_seats.size() > 0) {
 					availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));
 				}
 				//notify user of query results
-				if (availableSeats == -1) {System.out.println("\nThere are no Cruises on that date.\n");}
-				else if (availableSeats == 0) {System.out.println("\nThere are no seats available for this cruise.\n");}
+				if (availableSeats == 501) {System.out.println("\nThere are no Cruises on that date.\n");}
+				else if (availableSeats <= 0) {System.out.println("\nThere are no seats available for this cruise.\n");}
 				else {System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");}
 
                 break;
