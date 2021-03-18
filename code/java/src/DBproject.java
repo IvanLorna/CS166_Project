@@ -312,7 +312,7 @@ public class DBproject{
                                 String input_seats = in.readLine();
 				
 				//Get new id for ship, my prefered implementation over sequences
-				String query_for_sid = "SELECT MAX(S.id) FROM Ship S";
+				String query_for_sid = "SELECT MAX(S.id) FROM Ship S;";
 				String result = esql.executeQueryAndReturnResult(query_for_sid).get(0).get(0);
 				String sid = String.valueOf(Integer.parseInt(result)+1);
 				
@@ -400,7 +400,7 @@ public class DBproject{
                                 String input_arrport = in.readLine();
 
 				//Get new cnum for cruise, my prefered implementation over sequences
-                                String query_for_cnum = "SELECT MAX(C.cnum) FROM Cruise C";
+                                String query_for_cnum = "SELECT MAX(C.cnum) FROM Cruise C;";
                                 String result = esql.executeQueryAndReturnResult(query_for_cnum).get(0).get(0);
                                 String cnum = String.valueOf(Integer.parseInt(result)+1);
 				
@@ -443,12 +443,12 @@ public class DBproject{
                                 String crunum = in.readLine();
 				
 				//Get new rnum for reservation, my prefered implementation over sequences
-				String query_for_rnum = "SELECT MAX(R.rnum) FROM Reservation R"; 
+				String query_for_rnum = "SELECT MAX(R.rnum) FROM Reservation R;"; 
 				String result = esql.executeQueryAndReturnResult(query_for_rnum).get(0).get(0);
 				String rnum = String.valueOf(Integer.parseInt(result)+1);
 
 				//find seats available and tickets already sold
-				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+ crunum +" AND CI.ship_id = S.id";
+				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+ crunum +" AND CI.ship_id = S.id;";
 				List<List<String>> result_status = esql.executeQueryAndReturnResult(query_for_status);
 				
 				//find status based on seats available and sold tickets
