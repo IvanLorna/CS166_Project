@@ -21,9 +21,8 @@ source ./postgresql/stopPostgreDB.sh
 ```
 ### Assumptions:
 - for new objects, their unique IDs are the current highest ID value +1
-- we assume price input will always be in the correct monetary format
-- user will follow the syntax for dates correctly (YYYY-MM-DD)
-- tickets_sold can be greater than the number of seats, there are [tickets_sold - seats] people on the waitlist for that cruise.
+- we assume price input will always be in the correct monetary format (only up to 2 decnimal places.
+- tickets_sold can be greater than the number of seats. There are [tickets_sold - seats] people on the waitlist for that cruise.
 - Cruises date only tracks year, month, day and not time
 
 ### Queries:
