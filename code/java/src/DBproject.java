@@ -24,6 +24,11 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
 
+//added for date validation
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
+
 /**
  * This class defines a simple embedded SQL utility class that is designed to
  * work with PostgreSQL JDBC drivers.
@@ -34,6 +39,167 @@ public class DBproject{
 	//reference to physical database connection
 	private Connection _connection = null;
 	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+	//check positive number helper function
+	public static boolean checkifpositive(String str) {
+		if (str.trim().equals("")) {
+			System.out.println("empty");
+		    return false;
+		} else {
+		    int num;
+			try {
+				num = Integer.parseInt(str);
+			} catch (NumberFormatException e) {
+				System.out.println(str + " is not a number");
+				return false;
+			}
+			if (num >= 0) {
+				System.out.println(str + " is valid,  positive");
+				return true;
+			} else {
+				System.out.println(str + " is not positive");
+				return false;
+			}
+		}
+	}
+
+	//check number 0-500 helper function
+	public static boolean checkifrange(String str) {
+		if (str.trim().equals("")) {
+			System.out.println("empty");
+		    return false;
+		} else {
+		    int num;
+			try {
+				num = Integer.parseInt(str);
+			} catch (NumberFormatException e) {
+				System.out.println(str + " is not a number");
+				return false;
+			}
+			if ((num >= 0) && (num <= 500)) {
+				System.out.println(str + " is valid, between 0-500");
+				return true;
+			} else {
+				System.out.println(str + " is not between 0-500");
+				return false;
+			}
+		}
+	}
+
+	//check 5 characters helper function
+	public static boolean checkif5char(String str) {
+		str = str.trim();
+		if (str.length() == 5) {
+			System.out.println(str + " is valid, 5 characters");
+			return true;
+		} else {
+			System.out.println(str + " is not 5 characters");
+			return false;
+		}
+	}
+
+	//check 32 characters helper function
+	public static boolean checkif32char(String str) {
+		str = str.trim();
+		if (str.length() <= 32) {
+			System.out.println(str + " is valid, less than 33 characters");
+			return true;
+		} else {
+			System.out.println(str + " is more than 32 characters");
+			return false;
+		}
+	}
+
+	//check 64 characters helper function
+	public static boolean checkif64char(String str) {
+		str = str.trim();
+		if (str.length() <= 64) {
+			System.out.println(str + " is valid, less than 65 characters");
+			return true;
+		} else {
+			System.out.println(str + " is more than 64 characters");
+			return false;
+		}
+	}
+
+	//check 128 characters helper function
+	public static boolean checkif128char(String str) {
+		str = str.trim();
+		if (str.length() <= 128) {
+			System.out.println(str + " is valid, less than 129 characters");
+			return true;
+		} else {
+			System.out.println(str + " is more than 128 characters");
+			return false;
+		}
+	}
+
+	//check 24 characters helper function
+	public static boolean checkif24char(String str) {
+		str = str.trim();
+		if (str.length() <= 24) {
+			System.out.println(str + " is valid, less than 25 characters");
+			return true;
+		} else {
+			System.out.println(str + " is more than 24 characters");
+			return false;
+		}
+	}
+
+	//check customer ID helper function
+	public static boolean checkifID(String str) {
+		if (str.trim().equals("")) {
+			System.out.println("empty");
+		    return false;
+		} else {
+			str = str.trim();
+			if (str.length() == 10) {
+				try {
+					int num = Integer.parseInt(str);
+					System.out.println(str + " is valid, a 10 digit number");
+				} catch (NumberFormatException e) {
+					System.out.println(str + " is not a number");
+					return false;
+				}
+				return true;
+			} else {
+				System.out.println(str + " is not 10 characters");
+				return false;
+			}
+		}
+	}
+
+	//check reservation status ('R','W',or 'C') helper function
+	public static boolean checkifRWC(String str) {
+		str = str.trim();
+		if (str.length() == 1) {
+			if ((str == "R") || (str == "W") || (str == "C")) {
+				System.out.println(str + " is valid, ('R','W',or 'C')");
+				return true;
+			}
+		} 
+		System.out.println(str + " is not ('R','W',or 'C')");
+		return false;
+	}
+
+	//check date format validation helper function
+	public static boolean checkifdate(String str) {
+		if (str.trim().equals("")) {
+			System.out.println("empty");
+		    return false;
+		} else {
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		    sdf.setLenient(false);
+		    try {
+		        Date date = sdf.parse(str); 
+		        System.out.println(str + " is a valid date format");
+		    } catch (ParseException e) {
+		        System.out.println(str + " is an invalid Date format");
+		        return false;
+		    }
+		    return true;
+		}
+	}
 	
 	public DBproject(String dbname, String dbport, String user, String passwd) throws SQLException {
 		System.out.print("Connecting to database...");
@@ -298,18 +464,30 @@ public class DBproject{
 	public static void AddShip(DBproject esql) {//1
 		do{
 			try{
-       	 			//Poll user, read input
-                                System.out.print("Please enter new Ship's make: ");
-                                String input_make = in.readLine();
+       	 		//Poll user, read input
+                System.out.print("Please enter new Ship's make: ");
+                String input_make = in.readLine();
+                while (!checkif32char(input_make)) {
+                	input_make = in.readLine();
+                }
 
 				System.out.print("Please enter new Ship's model: ");
-                                String input_model = in.readLine();
+                String input_model = in.readLine();
+                while (!checkif64char(input_model)) {
+                	input_model = in.readLine();
+                }
 	
 				System.out.print("Please enter new Ship's age: ");
-                                String input_age = in.readLine();
+                String input_age = in.readLine();
+                while (!checkifpositive(input_age)) {
+                	input_age = in.readLine();
+                }
 				
 				System.out.print("Please enter new Ship's # of free seats (between 0 and 500): ");
-                                String input_seats = in.readLine();
+                String input_seats = in.readLine();
+                while (!checkifrange(input_seats)) {
+                	input_seats = in.readLine();
+                }
 				
 				//Get new id for ship, my prefered implementation over sequences
 				String query_for_sid = "SELECT MAX(S.id) FROM Ship S;";
@@ -331,24 +509,31 @@ public class DBproject{
 				//execute update using given executeUpdate function, it returns void
 				esql.executeUpdate(query);
 				//Notify User of Successful operation
-         			System.out.println ("\nSuccessfully added Ship with id " + sid + " to the database.\n");
+         		System.out.println ("\nSuccessfully added Ship with id " + sid + " to the database.\n");
 				
 				break;
-      			}catch(Exception e){
-         			//Output generated error for debugging
+      		}catch(Exception e){
+         		//Output generated error for debugging
 				e.printStackTrace();
 				continue;
-      			}}while (true);
+      		}
+      	}while (true);
 	}
 
 	public static void AddCaptain(DBproject esql) {//2
 		do{
-    			try{
+			try{
 				//Poll user, get input
 				System.out.print("Please enter new Captain's full name: ");
 				String input_name = in.readLine();
+				while (!checkif128char(input_name)) {
+                	input_name = in.readLine();
+                }
 				System.out.print("Please enter new Captain's nationality: ");
 				String input_nationality = in.readLine();
+				while (!checkif24char(input_nationality)) {
+                	input_nationality = in.readLine();
+                }
 
 
 				//Get new cid for reservation, my prefered implementation over sequences
@@ -373,61 +558,84 @@ public class DBproject{
 				//notify user of successful operation
 				System.out.println ("\nSuccessfully added Captain with id " + cid + " to the database.\n");
 
-			break;
+				break;
 			}catch(Exception e){
 				e.printStackTrace();
-			continue;
-		}}while (true);
+				continue;
+			}
+		}while (true);
 	}
 
 	public static void AddCruise(DBproject esql) {//3
-                do{
-                        try{
+        do{
+            try{
 				//poll user for info (theres alot this time)
-                                System.out.print("Please enter new Cruise's ticket price: ");
-                                String input_cost = in.readLine();
-                                System.out.print("Please enter new Cruise's number of tickets sold already: ");
-                                String input_numtics = in.readLine();
+		        System.out.print("Please enter new Cruise's ticket price: ");
+		        String input_cost = in.readLine();
+		        while (!checkifpositive(input_cost)) {
+                	input_cost = in.readLine();
+                }
+		        System.out.print("Please enter new Cruise's number of tickets sold already: ");
+		        String input_numtics = in.readLine();
+		        while (!checkifpositive(input_numtics)) {
+                	input_numtics = in.readLine();
+                }
 				System.out.print("Please enter new Cruise's number of stops: ");
-                                String input_numstops = in.readLine();
+		        String input_numstops = in.readLine();
+		        while (!checkifpositive(input_numstops)) {
+                	input_numstops = in.readLine();
+                }
 				System.out.print("Please enter new Cruise's departure date (YYYY-MM-DD): ");
-                                String input_depdate = in.readLine();
+		        String input_depdate = in.readLine();
+		        while (!checkifdate(input_depdate)) {
+                	input_depdate = in.readLine();
+                }
 				System.out.print("Please enter new Cruise's arrival date(YYYY-MM-DD): ");
-                                String input_arrdate = in.readLine();
+		        String input_arrdate = in.readLine();
+		        while (!checkifdate(input_arrdate)) {
+                	input_arrdate = in.readLine();
+                }
 				System.out.print("Please enter new Cruise's departure port code (5 characters): ");
-                                String input_depport = in.readLine();
+		        String input_depport = in.readLine();
+		        while (!checkif5char(input_depport)) {
+                	input_depport = in.readLine();
+                }
 				System.out.print("Please enter new Cruise's arrival port code (5 characters): ");
-                                String input_arrport = in.readLine();
+		        String input_arrport = in.readLine();
+		        while (!checkif5char(input_arrport)) {
+                	input_arrport = in.readLine();
+                }
 
 				//Get new cnum for cruise, my prefered implementation over sequences
-                                String query_for_cnum = "SELECT MAX(C.cnum) FROM Cruise C;";
-                                String result = esql.executeQueryAndReturnResult(query_for_cnum).get(0).get(0);
-                                String cnum = String.valueOf(Integer.parseInt(result)+1);
+		        String query_for_cnum = "SELECT MAX(C.cnum) FROM Cruise C;";
+		        String result = esql.executeQueryAndReturnResult(query_for_cnum).get(0).get(0);
+		        String cnum = String.valueOf(Integer.parseInt(result)+1);
 				
 
 				//INSERT INTO Cruise table to create new cruise object
-                                String query = "INSERT INTO Cruise VALUES (";
+		        String query = "INSERT INTO Cruise VALUES (";
 				//include user inputted data
 				//int data
-                                query += cnum + ", ";
+		        query += cnum + ", ";
 				query += input_cost + ", ";
 				query += input_numtics + ", ";
 				query += input_numstops + ", ";
 				//string data
 				query += "'" + input_depdate + "', ";
 				query += "'" + input_arrdate + "', ";
-                                query += "'" + input_arrport + "', ";
-                                query += "'" +input_depport + "'); ";
+		        query += "'" + input_arrport + "', ";
+		        query += "'" +input_depport + "'); ";
 				//perform SQL query
-                                esql.executeUpdate(query);
+		        esql.executeUpdate(query);
 				//notify user of successful operation
-                                System.out.println ("\nSuccessfully added Cruise with id " + cnum + " to the database.\n");
+		        System.out.println ("\nSuccessfully added Cruise with id " + cnum + " to the database.\n");
 
-                        break;
-                        }catch(Exception e){
-                                e.printStackTrace();
-                        continue;
-                }}while (true);
+		        break;
+	        }catch(Exception e){
+                e.printStackTrace();
+                continue;
+	        }
+    	}while (true);
 	
 	}
 
@@ -435,12 +643,18 @@ public class DBproject{
 	public static void BookCruise(DBproject esql) {//4
 		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
 		do{
-                        try{
+            try{
 				//poll user for input
   				System.out.print("Please enter you Customer ID: ");
-                                String custid = in.readLine();
-                                System.out.print("Please enter Cruise number you wish to book: ");
-                                String crunum = in.readLine();
+                String custid = in.readLine();
+                while (!checkifID(custid)) {
+                	custid = in.readLine();
+                }
+                System.out.print("Please enter Cruise number you wish to book: ");
+                String crunum = in.readLine();
+                while (!checkifpositive(crunum)) {
+                	crunum = in.readLine();
+                }
 				
 				//Get new rnum for reservation, my prefered implementation over sequences
 				String query_for_rnum = "SELECT MAX(R.rnum) FROM Reservation R;"; 
@@ -474,10 +688,10 @@ public class DBproject{
 
 				//INSERT new entry to Reservation
 				String query = "INSERT INTO  Reservation (rnum, ccid, cid, status) VALUES (";
-                                query += rnum + ", ";
+                query += rnum + ", ";
 				query += custid + ", ";
 				query += crunum + ", ";
-                                query += "'" + status + "');";
+                query += "'" + status + "');";
  
 				esql.executeUpdate(query);
 				//notify user of successful operation
@@ -485,23 +699,30 @@ public class DBproject{
 	
 				
 
-                        break;
-                        }catch(Exception e){
-                                e.printStackTrace();
-                        continue;
-                }}while (true);
+            	break;
+          	}catch(Exception e){
+                e.printStackTrace();
+            	continue;
+    		}
+        }while (true);
 
 	}
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//5
 		// For Cruise number and date, find the number of availalbe seats (i.e. total Ship capacity minus booked seats )
 		do{
-                        try{
-                               //poll user for data
+            try{
+                //poll user for data
 				System.out.print("Please enter Cruise number: ");
-                                String cnum = in.readLine();
-                                System.out.print("Please enter Cruise Departure date (YYYY-MM-DD): ");
-                                String ddate = in.readLine();
+                String cnum = in.readLine();
+                while (!checkifpositive(cnum)) {
+                	cnum = in.readLine();
+                }
+                System.out.print("Please enter Cruise Departure date (YYYY-MM-DD): ");
+                String ddate = in.readLine();
+                while (!checkifdate(ddate)) {
+                	ddate = in.readLine();
+                }
 				
 				//create query using user input
 				String query_for_seats = "SELECT C.num_sold, S.seats FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+cnum+" AND CI.cruise_id = C.cnum AND C.actual_departure_date = '"+ddate+"' AND CI.ship_id = S.id;";
@@ -515,11 +736,12 @@ public class DBproject{
 				if (availableSeats <= 0) {System.out.println("\nThere are no seats available for this cruise.\n");}
 				else {System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");}
 
-                        	break;
-                        }catch(Exception e){
-                                e.printStackTrace();
-                        continue;
-                }}while (true);
+                break;
+            }catch(Exception e){
+                e.printStackTrace();
+                continue;
+            }
+        }while (true);
 	
 	}
 
@@ -545,9 +767,15 @@ public class DBproject{
 				//apparently, need to pass in cruise and passenger status
 				//poll user for cruise number and reservation status
 				System.out.print("Please enter Cruise number: ");
-                                String cnum = in.readLine();
-                                System.out.print("Please enter Reservation status ('R','W',or 'C'): ");
-                                String status = in.readLine();
+                String cnum = in.readLine();
+                while (!checkifpositive(cnum)) {
+                	cnum = in.readLine();
+                }
+                System.out.print("Please enter Reservation status ('R','W',or 'C'): ");
+                String status = in.readLine();
+                while (!checkifRWC(status)) {
+                	status = in.readLine();
+                }
 				
 				//perform query using user input
 				String query = "SELECT R.status, COUNT(DISTINCT R.ccid) FROM Reservation R WHERE cid = "+cnum+" AND status = '"+status+"' GROUP BY R.status;";
@@ -563,4 +791,4 @@ public class DBproject{
 			}
 		}while(true);
 	}
-}								
+}
