@@ -62,6 +62,29 @@ public class DBproject{
 			}
 		}
 	}
+	
+	//check positive double helper function
+	public static boolean checkifposdouble(String str) {
+		if (str.trim().equals("")) {
+			System.out.println("empty");
+		    return false;
+		} else {
+		    double num;
+			try {
+				num = Double.parseDouble(str);
+			} catch (NumberFormatException e) {
+				System.out.println(str + " is not a double");
+				return false;
+			}
+			if (num >= 0) {
+				System.out.println(str + " is valid, positive double");
+				return true;
+			} else {
+				System.out.println(str + " is not positive");
+				return false;
+			}
+		}
+	}
 
 	//check number 0-500 helper function
 	public static boolean checkifrange(String str) {
@@ -147,23 +170,24 @@ public class DBproject{
 	}
 
 	//check customer ID helper function
-	public static boolean checkifID(String str) {
+	public static boolean checkifID(String str, int strnum) {
 		if (str.trim().equals("")) {
 			System.out.println("empty");
 		    return false;
 		} else {
 			str = str.trim();
-			if (str.length() == 10) {
-				try {
-					int num = Integer.parseInt(str);
-					System.out.println(str + " is valid, a 10 digit number");
-				} catch (NumberFormatException e) {
-					System.out.println(str + " is not a number");
-					return false;
-				}
+			int num;
+			try {
+				num = Integer.parseInt(str);
+			} catch (NumberFormatException e) {
+				System.out.println(str + " is not a number");
+				return false;
+			}
+			if ((num >= 0) && (num <= strnum)) {
+				System.out.println(str + " is valid, ID within bounds");
 				return true;
 			} else {
-				System.out.println(str + " is not 10 characters");
+				System.out.println(str + " is not within bounds");
 				return false;
 			}
 		}
@@ -572,7 +596,7 @@ public class DBproject{
 				//poll user for info (theres alot this time)
 		        System.out.print("Please enter new Cruise's ticket price: ");
 		        String input_cost = in.readLine();
-		        while (!checkifpositive(input_cost)) {
+		        while (!checkifposdouble(input_cost)) {
                 	input_cost = in.readLine();
                 }
 		        System.out.print("Please enter new Cruise's number of tickets sold already: ");
@@ -644,10 +668,16 @@ public class DBproject{
 		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
 		do{
             try{
+				//get max ID value for testing if input is existing ID
+				String query_for_strnum = "SELECT MAX(C.id) FROM Customer C;";
+		                String result_strnum = esql.executeQueryAndReturnResult(query_for_strnum).get(0).get(0);
+		                int strnum = Integer.parseInt(result_strnum);
+
+				
 				//poll user for input
   				System.out.print("Please enter you Customer ID: ");
                 String custid = in.readLine();
-                while (!checkifID(custid)) {
+                while (!checkifID(custid,strnum)) {
                 	custid = in.readLine();
                 }
                 System.out.print("Please enter Cruise number you wish to book: ");
@@ -731,9 +761,13 @@ public class DBproject{
 				List<List<String>> result_seats = esql.executeQueryAndReturnResult(query_for_seats);
 				
 				//perform logic from results, using Integer.parseInt to get Ints from Strings
-				int availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));
-				
-				if (availableSeats <= 0) {System.out.println("\nThere are no seats available for this cruise.\n");}
+				int availableSeats = 501; //error state, there are no cruises on that date
+				if (result_seats.size() > 0) {
+					availableSeats = Integer.parseInt(result_seats.get(0).get(1)) -  Integer.parseInt(result_seats.get(0).get(0));
+				}
+				//notify user of query results
+				if (availableSeats == 501) {System.out.println("\nThere are no Cruises on that date.\n");}
+				else if (availableSeats <= 0) {System.out.println("\nThere are no seats available for this cruise.\n");}
 				else {System.out.println("\nThere are "+ String.valueOf(availableSeats) +" seats available for this cruise.\n");}
 
                 break;
