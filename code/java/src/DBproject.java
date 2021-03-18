@@ -170,10 +170,7 @@ public class DBproject{
 	}
 
 	//check customer ID helper function
-	public static boolean checkifID(String str) {
-		String query_for_strnum = "SELECT MAX(C.id) FROM Customer C;"; 
-		String result = esql.executeQueryAndReturnResult(query_for_strnum).get(0).get(0);
-		int strnum = Integer.parseInt(result);
+	public static boolean checkifID(String str, int strnum) {
 		if (str.trim().equals("")) {
 			System.out.println("empty");
 		    return false;
@@ -193,7 +190,6 @@ public class DBproject{
 				System.out.println(str + " is not within bounds");
 				return false;
 			}
-			return true;
 		}
 	}
 
@@ -672,10 +668,16 @@ public class DBproject{
 		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
 		do{
             try{
+				//get max ID value for testing if input is existing ID
+				String query_for_strnum = "SELECT MAX(C.id) FROM Customer C;";
+		                String result_strnum = esql.executeQueryAndReturnResult(query_for_strnum).get(0).get(0);
+		                int strnum = Integer.parseInt(result_strnum);
+
+				
 				//poll user for input
   				System.out.print("Please enter you Customer ID: ");
                 String custid = in.readLine();
-                while (!checkifID(custid)) {
+                while (!checkifID(custid,strnum)) {
                 	custid = in.readLine();
                 }
                 System.out.print("Please enter Cruise number you wish to book: ");
