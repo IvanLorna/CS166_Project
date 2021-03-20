@@ -77,7 +77,7 @@ public class DBproject{
 				return false;
 			}
 			if (num >= 0) {
-				System.out.println(str + " is valid, positive double");
+				//System.out.println(str + " is valid, positive double");
 				return true;
 			} else {
 				System.out.println(str + " is not positive");
@@ -100,7 +100,7 @@ public class DBproject{
 				return false;
 			}
 			if ((num >= 0) && (num <= 500)) {
-				System.out.println(str + " is valid, between 0-500");
+				//System.out.println(str + " is valid, between 0-500");
 				return true;
 			} else {
 				System.out.println(str + " is not between 0-500");
@@ -113,7 +113,7 @@ public class DBproject{
 	public static boolean checkif5char(String str) {
 		str = str.trim();
 		if (str.length() == 5) {
-			System.out.println(str + " is valid, 5 characters");
+			//System.out.println(str + " is valid, 5 characters");
 			return true;
 		} else {
 			System.out.println(str + " is not 5 characters");
@@ -125,7 +125,7 @@ public class DBproject{
 	public static boolean checkif32char(String str) {
 		str = str.trim();
 		if (str.length() <= 32) {
-			System.out.println(str + " is valid, less than 33 characters");
+			//System.out.println(str + " is valid, less than 33 characters");
 			return true;
 		} else {
 			System.out.println(str + " is more than 32 characters");
@@ -137,7 +137,7 @@ public class DBproject{
 	public static boolean checkif64char(String str) {
 		str = str.trim();
 		if (str.length() <= 64) {
-			System.out.println(str + " is valid, less than 65 characters");
+			//System.out.println(str + " is valid, less than 65 characters");
 			return true;
 		} else {
 			System.out.println(str + " is more than 64 characters");
@@ -149,7 +149,7 @@ public class DBproject{
 	public static boolean checkif128char(String str) {
 		str = str.trim();
 		if (str.length() <= 128) {
-			System.out.println(str + " is valid, less than 129 characters");
+			//System.out.println(str + " is valid, less than 129 characters");
 			return true;
 		} else {
 			System.out.println(str + " is more than 128 characters");
@@ -161,7 +161,7 @@ public class DBproject{
 	public static boolean checkif24char(String str) {
 		str = str.trim();
 		if (str.length() <= 24) {
-			System.out.println(str + " is valid, less than 25 characters");
+			//System.out.println(str + " is valid, less than 25 characters");
 			return true;
 		} else {
 			System.out.println(str + " is more than 24 characters");
@@ -184,7 +184,7 @@ public class DBproject{
 				return false;
 			}
 			if ((num >= 0) && (num <= strnum)) {
-				System.out.println(str + " is valid, ID within bounds");
+				//System.out.println(str + " is valid, ID within bounds");
 				return true;
 			} else {
 				System.out.println(str + " is not within bounds");
@@ -198,7 +198,7 @@ public class DBproject{
 		str = str.trim();
 		if (str.length() == 1) {
 			if ((str == "R") || (str == "W") || (str == "C")) {
-				System.out.println(str + " is valid, ('R','W',or 'C')");
+				//System.out.println(str + " is valid, ('R','W',or 'C')");
 				return true;
 			}
 		} 
@@ -216,7 +216,7 @@ public class DBproject{
 		    sdf.setLenient(false);
 		    try {
 		        Date date = sdf.parse(str); 
-		        System.out.println(str + " is a valid date format");
+		        //System.out.println(str + " is a valid date format");
 		    } catch (ParseException e) {
 		        System.out.println(str + " is an invalid Date format");
 		        return false;
@@ -692,12 +692,13 @@ public class DBproject{
 				String rnum = String.valueOf(Integer.parseInt(result)+1);
 
 				//find seats available and tickets already sold
-				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = "+ crunum +" AND CI.ship_id = S.id;";
+				String query_for_status = "SELECT  S.seats, C.num_sold FROM Cruise C, Ship S, CruiseInfo CI WHERE C.cnum = "+ crunum +" AND CI.ship_id = S.id;";
 				List<List<String>> result_status = esql.executeQueryAndReturnResult(query_for_status);
 				
 				//find status based on seats available and sold tickets
 				String status = "C";
-				if (Integer.parseInt(result_status.get(0).get(0))  > Integer.parseInt(result_status.get(0).get(1))) {
+				if (result_status.size() == 0) { System.out.print("That cruise number is invalid.");}
+				else if (Integer.parseInt(result_status.get(0).get(0))  > Integer.parseInt(result_status.get(0).get(1))) {
 					status = "R";
 				} else {
 					status = "W";
@@ -807,9 +808,9 @@ public class DBproject{
                 }
                 System.out.print("Please enter Reservation status ('R','W',or 'C'): ");
                 String status = in.readLine();
-                while (!checkifRWC(status)) {
+                /*while (!checkifRWC(status)) {
                 	status = in.readLine();
-                }
+                }*/
 				
 				//perform query using user input
 				String query = "SELECT R.status, COUNT(DISTINCT R.ccid) FROM Reservation R WHERE cid = "+cnum+" AND status = '"+status+"' GROUP BY R.status;";
