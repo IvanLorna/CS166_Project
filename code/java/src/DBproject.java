@@ -54,7 +54,7 @@ public class DBproject{
 				return false;
 			}
 			if (num >= 0) {
-				System.out.println(str + " is valid,  positive");
+				//System.out.println(str + " is valid,  positive");
 				return true;
 			} else {
 				System.out.println(str + " is not positive");
